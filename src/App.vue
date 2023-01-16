@@ -1,29 +1,43 @@
-<script setup>
-import HelloWorld from './components/HelloWorld.vue'
-</script>
-
 <template>
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://vuejs.org/" target="_blank">
-      <img src="./assets/vue.svg" class="logo vue" alt="Vue logo" />
-    </a>
+  <div class="app">
+    <div class="content">
+      <AppInfo/>
+      <AppFilter/>
+    </div>
   </div>
-  <HelloWorld msg="Vite + Vue" />
+
+  <h1>{{ title }}</h1>
+
 </template>
 
-<style scoped>
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
+<script>
+import AppInfo from "./components/app-info/AppInfo.vue";
+import AppFilter from "./components/app-filter/AppFilter.vue";
+
+export default {
+  data() {
+    return {
+      title: "hello"
+    }
+  },
+  components: {
+    AppFilter,
+    AppInfo
+
+  }
 }
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
+</script>
+<style>
+.app {
+  height: 100vh;
+  color: #000000;
 }
-.logo.vue:hover {
-  filter: drop-shadow(0 0 2em #42b883aa);
+
+.content{
+  width: 1000px;
+  min-height: 700px;
+  background-color: #fff;
+  margin: 0 auto;
+  padding: 5rem 0;
 }
 </style>
