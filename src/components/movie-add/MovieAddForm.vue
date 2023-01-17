@@ -1,23 +1,42 @@
 <template>
-<div class="movie-add-form">
-  <h3>Add new </h3>
-  <form class="add-form d-flex gap-3">
-    <input type="text" class="form-control new-movie-label" placeholder="Title of movie?">
-    <input type="text" class="form-control new-movie-label" placeholder="Watched...">
-
-    <button class="btn btn-primary col-2">add +</button>
-  </form>
-</div>
+  <div class="movie-add-form">
+    <h3>Add new </h3>
+    <form class="add-form d-flex gap-3" @submit.prevent>
+      <input type="text" class="form-control new-movie-label" placeholder="Title of movie?" v-model="name">
+      <input type="text" class="form-control new-movie-label" placeholder="Watched..." v-model="viewers">
+      <button class="btn btn-primary col-2" @click="addNewMovie">add +</button>
+    </form>
+  </div>
 </template>
 
 <script>
 export default {
-  name: "MovieAddForm"
+  name: "MovieAddForm",
+  data() {
+    return {
+      name: '',
+      viewers: ''
+    }
+  },
+  methods: {
+    addNewMovie() {
+      const newMovie = {
+        name: this.name,
+        viewers: this.viewers,
+        favourite: false,
+        like: false,
+        id: Date.now()
+      }
+      this.$emit('createMovie', newMovie)
+      this.name = ''
+      this.viewers = ''
+    }
+  }
 }
 </script>
 
 <style scoped>
-.movie-add-form{
+.movie-add-form {
   margin: 2rem 0 0;
   padding: 1.5rem;
   background-color: #fcfaf5;

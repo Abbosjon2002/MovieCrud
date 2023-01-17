@@ -1,12 +1,12 @@
 <template>
-  <li class="list-group-item d-flex justify-content-between">
-    <span class="list-group-item-label">Spidermoon</span>
-    <input type="number" class="list-group-item-input" value="999">
+  <li class="list-group-item d-flex justify-content-between" :class="[{like: movie.like},{favourite: movie.favourite}]">
+    <span class="list-group-item-label" @click="movie.like = !movie.like" >{{ movie.name }}</span>
+    <input type="number" class="list-group-item-input" :value="movie.viewers">
     <div class="d-flex justify-content-center align-items-center">
-      <button type="button" class="btn-cookies btn-sm">
+      <button type="button" class="btn-cookies btn-sm" @click="movie.favourite =!movie.favourite">
         <i class="fas fa-cookie"></i>
       </button>
-      <button type="button" class="btn-trash btn-sm">
+      <button type="button" class="btn-trash btn-sm" >
         <i class="fas fa-trash"></i>
       </button>
       <i class="fas fa-star star"></i>
@@ -16,7 +16,16 @@
 
 <script>
 export default {
-  name: "MovieListItem"
+  name: "MovieListItem",
+  props: {
+    movie: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {
+
+  }
 }
 </script>
 

@@ -1,17 +1,17 @@
 <template>
   <div class="app font-monospace">
     <div class="content">
-      <AppInfo/>
+      <AppInfo :countAllMovies="movies.length" :favourites="movies.filter(e => e.favourite === true).length"/>
 
       <div class="search_panel">
         <SearchPanel/>
         <AppFilter/>
       </div>
-      <MovieList />
-      <MovieAddForm />
+      <MovieList :movies="movies"/>
+      <MovieAddForm @createMovie="addNewMovie"/>
     </div>
   </div>
- </template>
+</template>
 
 <script>
 import AppInfo from "./components/app-info/AppInfo.vue";
@@ -23,7 +23,37 @@ import MovieAddForm from "./components/movie-add/MovieAddForm.vue";
 export default {
   data() {
     return {
-      title: "hello"
+      title: "hello",
+      movies: [
+        {
+          name: "Flash",
+          viewers: 971,
+          favourite: false,
+          like: false,
+          id: 1
+        },
+        {
+          name: "Spidermon",
+          viewers: 9717,
+          favourite: false,
+          like: false,
+          id: 2
+        },
+        {
+          name: "Capin Halal",
+          viewers: 97,
+          favourite: true,
+          like: false,
+          id: 3
+        },
+        {
+          name: "Sheyx Tanos",
+          viewers: 77,
+          favourite: false,
+          like: true,
+          id: 4
+        },
+      ]
     }
   },
   components: {
@@ -33,6 +63,11 @@ export default {
     AppFilter,
     AppInfo
 
+  },
+  methods: {
+    addNewMovie(item){
+      this.movies.push(item)
+    }
   }
 }
 </script>
@@ -50,7 +85,7 @@ export default {
   padding: 5rem 1rem;
 }
 
-.search_panel{
+.search_panel {
   margin: 2rem 0 0;
   padding: 1.5rem;
   background-color: #fcfaf5;
