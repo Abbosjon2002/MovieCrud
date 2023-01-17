@@ -1,6 +1,9 @@
 <template>
-<h1>App Filter</h1>
-</template>
+<div class="btn-group d-flex">
+  <button class="btn btn-dark">All</button>
+  <button class="btn btn-outline-dark">Popular</button>
+  <button class="btn btn-outline-dark">Most viewed</button>
+</div></template>
 
 <script>
 export default {
