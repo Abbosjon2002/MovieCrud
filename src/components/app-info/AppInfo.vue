@@ -1,7 +1,7 @@
 <template>
 <div class="app_info">
   <p class="fs-3 text-uppercase">Total movies: {{ countAllMovies }}</p>
-  <p class="fs-4 text-uppercase">Watched movies: {{ favourites }}</p>
+  <p class="fs-4 text-uppercase">Favourite movies: {{ favourites }}</p>
 </div>
 </template>
 
