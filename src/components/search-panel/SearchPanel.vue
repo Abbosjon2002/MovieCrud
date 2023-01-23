@@ -1,10 +1,16 @@
 <template>
-  <input type="text" class="form-control seach-input" placeholder="Search movies...">
+  <input type="text" class="form-control seach-input" placeholder="Search movies..." v-model="term" @input="$emit('updateTerm', term)">
 </template>
 
 <script>
 export default {
-  name: "SearchPanel"
+  name: "SearchPanel",
+  data(){
+    return{
+      term: ''
+    }
+  },
+
 }
 </script>
 

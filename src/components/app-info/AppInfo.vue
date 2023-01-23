@@ -1,11 +1,12 @@
 <template>
-<div class="app_info">
+<BoxUI>
   <p class="fs-3 text-uppercase">Total movies: {{ countAllMovies }}</p>
   <p class="fs-4 text-uppercase">Favourite movies: {{ favourites }}</p>
-</div>
+</BoxUI>
 </template>
 
 <script>
+
 export default {
   name: "AppInfo",
   props: {
@@ -22,11 +23,5 @@ export default {
 </script>
 
 <style scoped>
-.app_info{
-  padding: 1.5rem;
-  border-radius: 4px;
-  background-color: #fcfaf5;
-  box-shadow: 0 10px 15px #00000030;
 
-}
 </style>

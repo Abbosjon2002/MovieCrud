@@ -1,6 +1,7 @@
 <template>
   <ul class="movie-list list-group">
-    <MovieListItem v-for="movie in movies" :movie="movie" :key="movie.id" />
+    <div v-if="movies.length <= 0">Yuklanmoqda </div>
+    <MovieListItem v-for="movie in movies" :movie="movie" :key="movie.id" @onToggle="$emit('onToggle', $event)" @removeItem="$emit('removeItem', movie.id)"/>
   </ul>
 </template>
 
