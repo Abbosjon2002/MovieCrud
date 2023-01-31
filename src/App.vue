@@ -3,12 +3,31 @@
     <div class="content">
       <AppInfo :countAllMovies="movies.length" :favourites="movies.filter(e => e.favourite === true).length"/>
 
-      <div class="search_panel">
+      <BoxUI class="search_panel">
         <SearchPanel @updateTerm="updateTermHandler"/>
         <AppFilter @updateFilter="updateFilter" :filterName="filter"/>
-      </div>
-      <MovieList :movies="onFilterHandler(onSearchHandler(movies, term), filter)" @onToggle="onToggleHandler"
-                 @removeItem="removeItemHandler"/>
+      </BoxUI>
+
+      <BoxUI class="d-flex justify-content-center">
+
+        <BoxUI v-if="!movies.length && !isLoading">No movies, yet!</BoxUI>
+        <Loading v-else-if="isLoading" class="text-primary"/>
+        <MovieList :movies="onFilterHandler(onSearchHandler(movies, term), filter)" @onToggle="onToggleHandler"
+                   @removeItem="removeItemHandler"/>
+
+      </BoxUI>
+
+      <BoxUI class="d-flex justify-content-center">
+        <nav aria-label="...">
+          <ul class="pagination pagination-sm">
+            <li v-for="pagenumber in totalPages" :key="pagenumber" @click="changePageNumber(pagenumber)"
+                class="page-item" :class="{'active': page=== pagenumber}"><span class="page-link">{{
+                pagenumber
+              }}</span>
+            </li>
+          </ul>
+        </nav>
+      </BoxUI>
       <MovieAddForm @createMovie="addNewMovie"/>
     </div>
   </div>
@@ -23,9 +42,11 @@ import MovieAddForm from "./components/movie-add/MovieAddForm.vue";
 import axios from "axios";
 import BoxUI from "./ui-components/BoxUI.vue";
 import PrimaryBtn from "./ui-components/PrimaryBtn.vue";
+import Loading from "./ui-components/Loading.vue";
 
 export default {
   components: {
+    Loading,
     PrimaryBtn,
     BoxUI,
     MovieAddForm,
@@ -40,14 +61,23 @@ export default {
       term: '',
       filter: '',
       res: '',
-      movies: []
+      movies: [],
+      isLoading: false,
+      limit: 10,
+      page: 1,
+      totalPages: 0
     }
   },
 
 
   methods: {
-    addNewMovie(item) {
-      this.movies.push(item)
+    async addNewMovie(item) {
+      try {
+        const response = await axios.post('https://jsonplaceholder.typicode.com/posts', item)
+        this.movies.push(response.data)
+      }catch (error){
+        alert(error.message)
+      }
     },
 
     onToggleHandler({id, prop}) {
@@ -59,8 +89,14 @@ export default {
       })
     },
 
-    removeItemHandler(id) {
+    async removeItemHandler(id) {
+      try {
+      const response = await axios.delete(`https://jsonplaceholder.typicode.com/posts/${id}`)
       this.movies = this.movies.filter(c => c.id !== id)
+      }catch (error){
+        alert(error.message)
+      }
+
     },
 
     onSearchHandler(arr, term) {
@@ -91,26 +127,42 @@ export default {
 
     async fetchMovie() {
       try {
-        setTimeout(async ()=>{
-          const {data} = await axios.get('https://jsonplaceholder.typicode.com/posts?_limit=10')
-          const newArr = data.map(item => ({
-            id: item.id,
-            name:item.title,
-            like: false,
-            favourite: false,
-            viewers: item.id*10
-          }))
-          this.movies = newArr
-        },3000)
-        } catch (error) {
+        this.isLoading = true;
+        const response = await axios.get('https://jsonplaceholder.typicode.com/posts', {
+          params: {
+            _limit: this.limit,
+            _page: this.page,
+          }
+        })
+        const newArr = response.data.map(item => ({
+          id: item.id,
+          name: item.title,
+          like: false,
+          favourite: false,
+          viewers: item.id * 10
+        }))
+        this.totalPages = Math.ceil(response.headers['x-total-count'] / this.limit)
+        this.movies = newArr
+      } catch (error) {
         alert(error.message)
+      } finally {
+        this.isLoading = false
       }
 
+    },
+    changePageNumber(page) {
+      this.page = page
     }
   },
 
   mounted() {
     this.fetchMovie()
+  },
+
+  watch: {
+    page() {
+      this.fetchMovie()
+    }
   }
 }
 </script>
@@ -129,11 +181,7 @@ export default {
 }
 
 .search_panel {
-  margin: 2rem 0 0;
-  padding: 1.5rem;
-  background-color: #fcfaf5;
-  border-radius: 4px;
-  box-shadow: 0 10px 15px #00000030;
+  margin: 2rem 0;
 
 }
 </style>
